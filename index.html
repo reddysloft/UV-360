@@ -15,7 +15,7 @@
 <body>
   <!-- ===== Top bar ===== -->
   <header class="topbar">
-    <div class="brand">
+    <div class="brand" id="brand" role="button" tabindex="0" title="Back to home" aria-label="Back to home">
       <img
         class="brand-mark"
         src="Ultraviolette_logo.jpg"
@@ -28,7 +28,7 @@
       </div>
     </div>
     <nav class="model-nav" aria-label="Select model">
-      <button type="button" class="model-btn is-active" data-model="x47">X47</button>
+      <button type="button" class="model-btn" data-model="x47">X47</button>
       <button type="button" class="model-btn" data-model="f77">F77</button>
       <button type="button" class="model-btn" data-model="shockwave">SHOCKWAVE</button>
       <button type="button" class="model-btn" data-model="tesseract">TESSERACT</button>
@@ -37,6 +37,14 @@
 
   <!-- ===== Hero ===== -->
   <main>
+    <section class="home" id="home">
+      <img
+        class="home-img"
+        src="Home%20Page%20image.jpg"
+        alt="Ultraviolette — Design, User Experience, Technology"
+      />
+    </section>
+
     <section class="hero">
       <h1 class="hero-title">X-47</h1>
     </section>

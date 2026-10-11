@@ -107,7 +107,7 @@ const CONTENT = {
 };
 
 // ===== State =====
-let activeModel = "x47";
+let activeModel = null; // null = homepage (no model selected)
 let activeCategory = "design";
 let activeSubTab = null; // falls back to the first sub-tab when null
 let activeColor = null; // falls back to the first color when null
@@ -118,6 +118,9 @@ const modelButtons = document.querySelectorAll(".model-btn");
 const heroTitle = document.querySelector(".hero-title");
 const catNav = document.getElementById("cat-nav");
 const contentEl = document.getElementById("content");
+const brand = document.getElementById("brand");
+const homeEl = document.getElementById("home");
+const heroEl = document.querySelector(".hero");
 
 // ===== Render: category buttons =====
 function renderCategoryNav() {
@@ -403,6 +406,10 @@ function selectCategory(catId) {
 
 function selectModel(model) {
   activeModel = model;
+  // switch from homepage to the detail view
+  homeEl.style.display = "none";
+  heroEl.style.display = "";
+  contentEl.style.display = "";
   heroTitle.textContent = MODEL_NAMES[model] || model;
   modelButtons.forEach((b) => {
     b.classList.toggle("is-active", b.dataset.model === model);
@@ -411,10 +418,30 @@ function selectModel(model) {
   renderContent();
 }
 
+// Homepage view: show the hero image, hide the model detail view
+function showHome() {
+  activeModel = null;
+  clearInterval(slideTimer);
+  modelButtons.forEach((b) => b.classList.remove("is-active"));
+  homeEl.style.display = "";
+  heroEl.style.display = "none";
+  catNav.style.display = "none";
+  contentEl.style.display = "none";
+}
+
 modelButtons.forEach((btn) => {
   btn.addEventListener("click", () => selectModel(btn.dataset.model));
 });
 
+// Clicking the logo returns to the homepage
+brand.addEventListener("click", showHome);
+brand.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    showHome();
+  }
+});
+
 // ===== Init =====
 renderCategoryNav();
-renderContent();
+showHome();
