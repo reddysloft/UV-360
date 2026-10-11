@@ -331,6 +331,29 @@ main {
   color: #fff;
 }
 
+/* ===== Coming soon watermark ===== */
+.coming-soon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  padding: 50px 0;
+}
+
+.coming-soon-text {
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
+  font-size: clamp(40px, 9vw, 100px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.09);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  padding: 26px 54px;
+  transform: rotate(-7deg);
+  user-select: none;
+  white-space: nowrap;
+}
+
 /* ===== Footer ===== */
 .pagefoot {
   position: relative;

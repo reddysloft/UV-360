@@ -8,6 +8,9 @@ const MODEL_NAMES = {
   tesseract: "Tesseract",
 };
 
+// Models not launched yet — show a "Soon Available" watermark instead of content
+const COMING_SOON = new Set(["shockwave", "tesseract"]);
+
 // ===== Categories (shared across all models) =====
 const CATEGORIES = [
   { id: "design", label: "Design & Colors" },
@@ -83,6 +86,18 @@ function renderCategoryNav() {
 
 // ===== Render: content =====
 function renderContent() {
+  // Not-yet-launched models: hide categories and show a watermark
+  if (COMING_SOON.has(activeModel)) {
+    catNav.style.display = "none";
+    contentEl.innerHTML = `
+      <div class="coming-soon">
+        <span class="coming-soon-text">Soon Available</span>
+      </div>
+    `;
+    return;
+  }
+  catNav.style.display = "";
+
   const cat = CATEGORIES.find((c) => c.id === activeCategory);
   const data = (CONTENT[activeModel] || {})[activeCategory] || {};
 
