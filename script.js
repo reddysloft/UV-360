@@ -14,14 +14,16 @@ const COMING_SOON = new Set(["shockwave", "tesseract"]);
 // ===== Categories (shared across all models) =====
 const CATEGORIES = [
   { id: "design", label: "Design & Colors" },
-  { id: "performance", label: "Performance & Range" },
+  { id: "variants", label: "Variants" },
   { id: "battery", label: "Battery & Charging" },
+  { id: "performance", label: "Performance & Range" },
   { id: "motor", label: "Motor" },
   { id: "safety", label: "Safety" },
   { id: "smarttech", label: "Smart Tech & Utility" },
   { id: "mechanical", label: "Mechanical" },
   { id: "dimensions", label: "Dimensions" },
   { id: "warranty", label: "Warranty" },
+  { id: "differences", label: "Differences in Variants" },
 ];
 
 // ===== Content store =====
@@ -52,6 +54,35 @@ const CONTENT = {
         },
       ],
     },
+    battery: {
+      layout: "specs",
+      sections: [
+        {
+          heading: "Battery",
+          specs: [
+            { label: "Battery Pack", values: ["SRB7", "SRB10"] },
+            { label: "Energy Capacity", values: ["7.1 kWh", "10.3 kWh"] },
+            { label: "BMS &amp; Safety", values: ["5-level Safety System", "5-level Safety System"] },
+          ],
+        },
+        {
+          heading: "Charging",
+          specs: [
+            { label: "Standard Charger", values: ["20%-80% in 3hr 30min", "20%-80% in 5hr"] },
+            { label: "On-board Charger", values: ["20% - 80% in 3hr 30min", "20% - 80% in 5hr"] },
+            { label: "Boost Charger", values: ["20% - 80% in 1hr 45min", "20% - 80% in 2hr 30min"] },
+            { label: "UV Supernova Plus", values: ["20% - 80% in 40min", "20% - 80% in 60min"] },
+          ],
+        },
+      ],
+      images: [
+        "Battery.png",
+        "battery (1).png",
+        "battery (2).png",
+        "battery (3).png",
+        "Battery cells.png",
+      ],
+    },
   },
   f77: {},
   shockwave: {},
@@ -63,6 +94,7 @@ let activeModel = "x47";
 let activeCategory = "design";
 let activeSubTab = null; // falls back to the first sub-tab when null
 let activeColor = null; // falls back to the first color when null
+let slideTimer = null; // auto-advance timer for the image slideshow
 
 // ===== Elements =====
 const modelButtons = document.querySelectorAll(".model-btn");
@@ -86,6 +118,8 @@ function renderCategoryNav() {
 
 // ===== Render: content =====
 function renderContent() {
+  clearInterval(slideTimer); // stop any running slideshow before re-rendering
+
   // Not-yet-launched models: hide categories and show a watermark
   if (COMING_SOON.has(activeModel)) {
     catNav.style.display = "none";
@@ -100,6 +134,12 @@ function renderContent() {
 
   const cat = CATEGORIES.find((c) => c.id === activeCategory);
   const data = (CONTENT[activeModel] || {})[activeCategory] || {};
+
+  if (data.layout === "specs") {
+    contentEl.innerHTML = specsPanelHTML(data);
+    initSlideshow(contentEl.querySelector("[data-slideshow]"));
+    return;
+  }
 
   if (Array.isArray(data.tabs) && data.tabs.length) {
     renderTabbedContent(data.tabs);
@@ -208,6 +248,108 @@ function colorsPanelHTML(colors) {
       <div class="content-media">${mediaHTML}</div>
     </div>
   `;
+}
+
+// ===== Specs layout (headings + spec rows on the left, slideshow on the right) =====
+function specValues(values) {
+  return values
+    .map((v) => `<span class="spec-val">${v}</span>`)
+    .join(`<span class="spec-pipe">|</span>`);
+}
+
+function sectionHTML(section) {
+  const rows = section.specs
+    .map(
+      (s) => `
+      <div class="spec-row">
+        <div class="spec-label">${s.label}</div>
+        <div class="spec-values">${specValues(s.values)}</div>
+      </div>`
+    )
+    .join("");
+  return `
+    <div class="spec-section">
+      <h3 class="spec-heading">${section.heading}</h3>
+      ${rows}
+    </div>
+  `;
+}
+
+function slideshowHTML(images) {
+  if (!images || !images.length) {
+    return `<div class="content-media"><span class="media-placeholder">Image goes here</span></div>`;
+  }
+  const slides = images
+    .map(
+      (src, i) =>
+        `<img class="slide${i === 0 ? " is-active" : ""}" src="${encodeURI(
+          src
+        )}" alt="Slide ${i + 1}" />`
+    )
+    .join("");
+  const dots = images
+    .map(
+      (_, i) =>
+        `<button type="button" class="dot${
+          i === 0 ? " is-active" : ""
+        }" data-index="${i}" aria-label="Go to slide ${i + 1}"></button>`
+    )
+    .join("");
+  return `
+    <div class="slideshow" data-slideshow>
+      <div class="slides">${slides}</div>
+      <button type="button" class="slide-nav slide-prev" aria-label="Previous image">&#8249;</button>
+      <button type="button" class="slide-nav slide-next" aria-label="Next image">&#8250;</button>
+      <div class="slide-dots">${dots}</div>
+    </div>
+  `;
+}
+
+function specsPanelHTML(data) {
+  const sections = (data.sections || []).map(sectionHTML).join("");
+  return `
+    <div class="specs-panel">
+      <div class="specs-col">${sections}</div>
+      <div class="specs-media">${slideshowHTML(data.images)}</div>
+    </div>
+  `;
+}
+
+function initSlideshow(root) {
+  if (!root) return;
+  const slides = root.querySelectorAll(".slide");
+  const dots = root.querySelectorAll(".dot");
+  if (slides.length <= 1) return; // nothing to cycle through
+
+  let index = 0;
+
+  function show(i) {
+    index = (i + slides.length) % slides.length;
+    slides.forEach((s, k) => s.classList.toggle("is-active", k === index));
+    dots.forEach((d, k) => d.classList.toggle("is-active", k === index));
+  }
+
+  function startAuto() {
+    clearInterval(slideTimer);
+    slideTimer = setInterval(() => show(index + 1), 4000);
+  }
+
+  root.querySelector(".slide-next").addEventListener("click", () => {
+    show(index + 1);
+    startAuto();
+  });
+  root.querySelector(".slide-prev").addEventListener("click", () => {
+    show(index - 1);
+    startAuto();
+  });
+  dots.forEach((d) => {
+    d.addEventListener("click", () => {
+      show(Number(d.dataset.index));
+      startAuto();
+    });
+  });
+
+  startAuto();
 }
 
 // ===== Actions =====
