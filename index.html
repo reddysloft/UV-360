@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UV-360 — Product Specialist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ===== Top bar ===== -->
+  <header class="topbar">
+    <div class="brand">
+      <img
+        class="brand-mark"
+        src="Ultraviolette_logo.jpg"
+        alt="Ultraviolette logo"
+        onerror="this.style.display='none'"
+      />
+      <div class="brand-word">
+        <span class="brand-word-1">ULTRAVIOLETTE</span>
+        <span class="brand-word-2">AUTOMOTIVE</span>
+      </div>
+    </div>
+    <nav class="model-nav" aria-label="Select model">
+      <button type="button" class="model-btn is-active" data-model="x47">X47</button>
+      <button type="button" class="model-btn" data-model="f77">F77</button>
+      <button type="button" class="model-btn" data-model="shockwave">SHOCKWAVE</button>
+      <button type="button" class="model-btn" data-model="tesseract">TESSERACT</button>
+    </nav>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <main>
+    <section class="hero">
+      <h1 class="hero-title">X-47</h1>
+    </section>
+
+    <nav class="cat-nav" id="cat-nav" aria-label="Select category"></nav>
+
+    <section class="content" id="content"></section>
+  </main>
+
+  <footer class="pagefoot">
+    <p>*Work in progress — step 1 of our build.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
