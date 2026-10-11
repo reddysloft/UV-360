@@ -54,6 +54,23 @@ const CONTENT = {
         },
       ],
     },
+    variants: {
+      layout: "list",
+      items: [
+        "X47",
+        "X47 Original",
+        "X47 Original +",
+        "X47 Recon",
+        "X47 Recon +",
+        "X47 Dessert Wing",
+      ],
+      images: [
+        "Turbo Red - X47.png",
+        "Stellar white - X47.png",
+        "Cosmic Black - X47.png",
+        "SANDSTORM - X47.png",
+      ],
+    },
     battery: {
       layout: "specs",
       sections: [
@@ -137,6 +154,12 @@ function renderContent() {
 
   if (data.layout === "specs") {
     contentEl.innerHTML = specsPanelHTML(data);
+    initSlideshow(contentEl.querySelector("[data-slideshow]"));
+    return;
+  }
+
+  if (data.layout === "list") {
+    contentEl.innerHTML = listPanelHTML(data);
     initSlideshow(contentEl.querySelector("[data-slideshow]"));
     return;
   }
@@ -310,6 +333,21 @@ function specsPanelHTML(data) {
   return `
     <div class="specs-panel">
       <div class="specs-col">${sections}</div>
+      <div class="specs-media">${slideshowHTML(data.images)}</div>
+    </div>
+  `;
+}
+
+// ===== List layout (headings on the left, slideshow on the right) =====
+function listPanelHTML(data) {
+  const items = (data.items || [])
+    .map((name) => `<li class="variant-item">${name}</li>`)
+    .join("");
+  return `
+    <div class="specs-panel">
+      <div class="specs-col">
+        <ul class="variant-list">${items}</ul>
+      </div>
       <div class="specs-media">${slideshowHTML(data.images)}</div>
     </div>
   `;

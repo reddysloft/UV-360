@@ -382,6 +382,34 @@ main {
   margin: 0 10px;
 }
 
+/* ===== Variant list ===== */
+.variant-list {
+  list-style: none;
+}
+
+.variant-item {
+  position: relative;
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 16px 0 16px 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.variant-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 22px;
+  background: var(--red);
+}
+
 /* ===== Slideshow ===== */
 .slideshow {
   position: relative;
