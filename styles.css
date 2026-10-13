@@ -143,7 +143,7 @@ main {
 /* ===== Hero ===== */
 
 .hero {
-  max-width: 1100px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 10px 40px 20px;
   text-align: center;
@@ -167,24 +167,30 @@ main {
 
 /* ===== Category nav ===== */
 .cat-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  max-width: 1100px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 0 40px;
+  overflow-x: auto;
+}
+
+.cat-nav-inner {
+  display: flex;
+  gap: 8px;
+  width: max-content;
+  min-width: 100%;
+  justify-content: center;
 }
 
 .cat-btn {
+  flex: 0 0 auto;
   font-family: "Oswald", sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
   color: #cfcfcf;
   background: transparent;
   border: 1px solid var(--line);
-  padding: 10px 16px;
+  padding: 8px 13px;
   cursor: pointer;
   text-transform: uppercase;
   white-space: nowrap;
@@ -204,7 +210,7 @@ main {
 
 /* ===== Content panel ===== */
 .content {
-  max-width: 1100px;
+  max-width: 1600px;
   margin: 44px auto 0;
   padding: 0 40px;
 }

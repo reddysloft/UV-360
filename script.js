@@ -125,6 +125,8 @@ const heroEl = document.querySelector(".hero");
 // ===== Render: category buttons =====
 function renderCategoryNav() {
   catNav.innerHTML = "";
+  const inner = document.createElement("div");
+  inner.className = "cat-nav-inner";
   CATEGORIES.forEach((cat) => {
     const btn = document.createElement("button");
     btn.type = "button";
@@ -132,8 +134,9 @@ function renderCategoryNav() {
     btn.dataset.category = cat.id;
     btn.textContent = cat.label;
     btn.addEventListener("click", () => selectCategory(cat.id));
-    catNav.appendChild(btn);
+    inner.appendChild(btn);
   });
+  catNav.appendChild(inner);
 }
 
 // ===== Render: content =====
